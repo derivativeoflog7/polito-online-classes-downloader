@@ -65,6 +65,6 @@ def main():
     page_urls = get_page_urls(r.text)
     video_urls = get_video_urls(page_urls, s)
     download_videos(video_urls, s, course)
-
+    die("Done!", 0)
 
 main()
