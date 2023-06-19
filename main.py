@@ -1,10 +1,14 @@
 import os
 import shutil
 import requests
+import logging
 from bs4 import BeautifulSoup
 
+# "settings"
 OUTPUT_DIR = "./out/"
+DEBUGGING = False
 
+# Constants
 URL_PLACEHOLDER = "?#?"
 BASE_URL = "https://didattica.polito.it/portal/pls/portal/"
 VC_BASE_URL = f"{BASE_URL}sviluppo.videolezioni.vis?cor={URL_PLACEHOLDER}"
@@ -12,6 +16,7 @@ VC_BASE_URL = f"{BASE_URL}sviluppo.videolezioni.vis?cor={URL_PLACEHOLDER}"
 
 def die(msg: str, code: int) -> None:
     print(msg)
+    print("Press enter to exit")
     input()
     exit(code)
 
@@ -21,19 +26,24 @@ def get_page_urls(html: str) -> list[str]:
     soup = BeautifulSoup(html, features="html.parser")
     elems = soup.find("div", {"id": "navbar_left_menu"})  # Get navbar...
     elems = elems.find_all("li", {"class": "h5"})  # ... get all h5 tags ...
+    logging.info(f"Found {len(elems)} links")
     for i in elems:
         partial_url = i.find("a")["href"]  # ... finally get the hrefs from the <a> children
         url = f"{BASE_URL}{partial_url}"  # Transform to full URL
         urls.append(url)
+        logging.info(f"Added {url} to list")
     return urls
 
 
 def get_video_urls(page_urls: list[str], s: requests.Session) -> list[str]:
     urls = []
     for i in page_urls:
+        logging.info(f"Visiting {i} to retrieve video URL")
         r = s.get(i)  # Visit page...
         soup = BeautifulSoup(r.text, features="html.parser")
-        urls.append(soup.find("video").find("source")["src"])  # ...and get <source> inside <video>
+        video_url = soup.find("video").find("source")["src"]
+        urls.append(video_url)  # ...and get <source> inside <video>
+        logging.info(f"Added {video_url} to list")
     return urls
 
 
@@ -46,12 +56,16 @@ def download_videos(video_urls: list[str], s: requests.Session, course: str) -> 
     for count, value in enumerate(video_urls):
         print(f"Downloading video {count + 1}/{tot_count}")
         filename = value.split("/")[-1]  # Get filename from url
+        logging.info(f"Downloading {value}")
         with s.get(value, stream=True) as r:
             with open(f"{OUTPUT_DIR}{course}/{filename}", "wb") as f:
                 shutil.copyfileobj(r.raw, f)
 
 
 def main():
+    if DEBUGGING:
+        logging.basicConfig(level=logging.DEBUG)
+
     owa_session = input("Enter the owa_session cookie value: ")
     course = input("Enter the course ID: ")
     cookies = {"owa_session": owa_session}
