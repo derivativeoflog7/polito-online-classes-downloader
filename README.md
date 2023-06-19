@@ -9,7 +9,9 @@ This is for online classes, NOT VCs! For those, I recommend using [PoliTools](ht
 
 
 # How to use
-1. Install the required packages running ```pip install -r requirements.txt```
+1. Download the script
+  - Windows users can use the .exe file found in [Releases](https://github.com/DerivativeOfLog7/polito-online-classes-downloader/releases/latest)
+  - Otherwise, clone the repo and install the requirements by running ```pip install -r requirements```
 2. Login onto the teaching portal, and grab the value of the owa_session cookie (here I use [EditThisCookie](https://www.editthiscookie.com/))
 ![cookie](https://github.com/DerivativeOfLog7/polito-online-classes-downloader/assets/100133857/325fc244-227b-44dd-8b25-20f3f0d71cf2)
 
