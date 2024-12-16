@@ -3,7 +3,8 @@ Python 3 tool to download online classes from Polito's portal
 
 # WARNING!
 This is for online classes, NOT VCs! For those, I recommend using [PoliTools](https://chrome.google.com/webstore/detail/politools/fbbjhoaakfhbggkegckmjafkffaofnkd?hl=it)
-![asd](https://github.com/DerivativeOfLog7/polito-online-classes-downloader/assets/100133857/1618ad6a-7cd2-444b-9524-6da85c906f2f)
+
+![instruction](https://github.com/user-attachments/assets/0bb446ee-80cc-4bc6-b3b3-0fbd839cbc3e)
 
 
 
